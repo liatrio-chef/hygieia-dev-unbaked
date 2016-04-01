@@ -2,6 +2,10 @@ hygieia-dev-unbaked Vagrant Box
 ========================
 An unbaked vagrant box that uses chef to spin up a pipeline consisting of archiva, github, sonarqube, jenkins, tomcat, and hygieia.
 
+The unbaked version can be found here: https://github.com/liatrio-chef/hygieia-dev-unbaked
+
+The baked version can be found here: https://github.com/liatrio-chef/hygieia-dev-baked
+
 Requirements
 ------------
 ChefDK must be installed: https://downloads.chef.io/chef-dk/
@@ -34,6 +38,8 @@ Pipeline (Internal IP 192.168.100.10)
 
 - Hygieia - Browse to http://localhost:13000/ 
   - create a user and dashboard, the collectors are aware of the different components
+
+This cookbook relies on [Berkshelf](http://berkshelf.com) to pull wrapper cookbook dependencies from https://github.com/liatrio-chef
 
 License and Authors
 -------------------
