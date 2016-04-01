@@ -41,6 +41,10 @@ Pipeline (Internal IP 192.168.100.10)
 
 This cookbook relies on [Berkshelf](http://berkshelf.com) to pull wrapper cookbook dependencies from https://github.com/liatrio-chef
 
+Configuration
+-------------
+Modify /home/vagrant/dashboard.properties to point to your existing servers and then restart all collectors by running: `cd /etc/systemd/system; sudo systemctl restart hygieia-*`
+
 License and Authors
 -------------------
 Authors: drew@liatrio.com
