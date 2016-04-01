@@ -8,6 +8,8 @@ The baked version can be found here: https://github.com/liatrio-chef/hygieia-dev
 
 Requirements
 ------------
+Vagrant 1.8.1
+
 ChefDK must be installed: https://downloads.chef.io/chef-dk/
 
 vagrant-berkshelf plugin must installed: `vagrant plugin install vagrant-berkshelf`
