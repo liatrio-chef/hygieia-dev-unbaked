@@ -1,4 +1,4 @@
-infra-auto Cookbook
+hygieia-dev-unbaked Vagrant Box
 ========================
 An unbaked vagrant box that uses chef to spin up a pipeline consisting of archiva, github, sonarqube, jenkins, tomcat, and hygieia.
 
