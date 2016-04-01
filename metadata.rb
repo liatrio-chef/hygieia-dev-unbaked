@@ -1,0 +1,7 @@
+name             'infra-auto'
+maintainer       'Drew Holt'
+maintainer_email 'drew@liatrio.com'
+license          'All rights reserved'
+description      'Installs/Configures a pipeline with hygieia dashboard'
+long_description 'Installs/Configures a pipeline with hygieia dashboard'
+version          '0.1.0'
