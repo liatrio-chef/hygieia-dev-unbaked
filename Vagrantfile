@@ -53,7 +53,7 @@ Vagrant.configure(2) do |config|
             "githuburl" => "https://github.com/drewliatro/spring-petclinic/",
             "giturl" => "https://github.com/drew-liatrio/spring-petclinic.git",
             "hygieiaurl" => "http://192.168.100.10:8080/api/"
-          }
+          },
           "create_job" => {
             "maven_goals" => "clean deploy"
           }
