@@ -5,7 +5,7 @@ metadata
 cookbook 'apache2-liatrio', git: 'https://github.com/liatrio-chef/apache2-liatrio.git'
 cookbook 'archiva-liatrio', git: 'http://github.com/liatrio-chef/archiva-liatrio.git'
 cookbook 'sonarqube-liatrio', git: 'http://github.com/liatrio-chef/sonarqube-liatrio.git'
-cookbook 'jenkins', git: 'http://github.com/liatrio-chef/jenkins-temp.git'
+cookbook 'jenkins-liatrio', git: 'http://github.com/liatrio-chef/jenkins-liatrio.git'
 cookbook 'tomcat-liatrio', git: 'http://github.com/liatrio-chef/tomcat-liatrio.git'
 cookbook 'hygieia-liatrio', git: 'http://github.com/liatrio-chef/hygieia-liatrio.git'
 

@@ -13,10 +13,10 @@ Vagrant.configure(2) do |config|
       chef.add_recipe "archiva-liatrio"
       chef.add_recipe "sonarqube-liatrio"
       chef.add_recipe "tomcat-liatrio"
-      chef.add_recipe "jenkins::install_server"
-      chef.add_recipe "jenkins::install_plugins"
-      chef.add_recipe "jenkins::create_job"
-      chef.add_recipe "jenkins::finishrecipe"
+      chef.add_recipe "jenkins-liatrio"
+      chef.add_recipe "jenkins-liatrio::install_plugins"
+      chef.add_recipe "jenkins-liatrio::create_job"
+      chef.add_recipe "jenkins-liatrio::create_creds"
       chef.add_recipe "hygieia-liatrio"
       chef.json = {
         "java" => {
@@ -38,14 +38,21 @@ Vagrant.configure(2) do |config|
           "ajp_port" => "8010"
         },
         "jenkins" => {
+          "master" => {
+            "host" => "localhost",
+            "port" => 8083
+            #"repostiroy" => "http://pkg.jenkins-ci.org/redhat"
+          }
+        },
+        "jenkins_liatrio" => {
           "maven_mirror" => "http://localhost:8081/repository/internal",
+          "enablesonar" => true,
           "sonarurl" => "http://localhost:9000",
           "sonarjdbcurl" => "tcp://localhost:9092/sonar",
           "githuburl" => "https://github.com/drewliatro/spring-petclinic/",
           "giturl" => "https://github.com/drew-liatrio/spring-petclinic.git",
-          "ip" => "localhost:8083",
+          "ip" => "localhost",
           "port" => "8083",
-          #"jenkinsdlurl" => "http://192.168.1.125/jenkins-1.653-1.1.noarch.rpm",
 	  "hygieiaurl" => "http://192.168.100.10:8080/api/"
         }, 
         "hygieia_liatrio" => {
