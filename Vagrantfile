@@ -45,16 +45,19 @@ Vagrant.configure(2) do |config|
           }
         },
         "jenkins_liatrio" => {
-          "maven_mirror" => "http://localhost:8081/repository/internal",
-          "enablesonar" => true,
-          "sonarurl" => "http://localhost:9000",
-          "sonarjdbcurl" => "tcp://localhost:9092/sonar",
-          "githuburl" => "https://github.com/drewliatro/spring-petclinic/",
-          "giturl" => "https://github.com/drew-liatrio/spring-petclinic.git",
-          "ip" => "localhost",
-          "port" => "8083",
-	  "hygieiaurl" => "http://192.168.100.10:8080/api/"
-        }, 
+          "install_plugins" => {
+            "maven_mirror" => "http://localhost:8081/repository/internal",
+            "enablesonar" => true,
+            "sonarurl" => "http://localhost:9000",
+            "sonarjdbcurl" => "tcp://localhost:9092/sonar",
+            "githuburl" => "https://github.com/drewliatro/spring-petclinic/",
+            "giturl" => "https://github.com/drew-liatrio/spring-petclinic.git",
+            "hygieiaurl" => "http://192.168.100.10:8080/api/"
+          }
+          "create_job" => {
+            "maven_goals" => "clean deploy"
+          }
+        },
         "hygieia_liatrio" => {
           "jenkins_url" => "http://192.168.100.10:8083/",
 	  "udeploy_url" => "http://192.168.100.40:8080",
