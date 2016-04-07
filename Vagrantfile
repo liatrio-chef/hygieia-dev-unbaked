@@ -46,6 +46,7 @@ Vagrant.configure(2) do |config|
         },
         "jenkins_liatrio" => {
           "install_plugins" => {
+            "enablearchiva" => true,
             "maven_mirror" => "http://localhost:8081/repository/internal",
             "enablesonar" => true,
             "sonarurl" => "http://localhost:9000",
@@ -60,12 +61,12 @@ Vagrant.configure(2) do |config|
         },
         "hygieia_liatrio" => {
           "jenkins_url" => "http://192.168.100.10:8083/",
-	  "udeploy_url" => "http://192.168.100.40:8080",
-	  "udeploy_username" => "admin",
-	  "udeploy_password" => "password",
-	  "sonar_url" => "http://192.168.100.10:9000/",
-	  "stash_url" => "http://192.168.100.60:7990/"
-	}
+          "udeploy_url" => "http://192.168.100.40:8080",
+          "udeploy_username" => "admin",
+          "udeploy_password" => "password",
+          "sonar_url" => "http://192.168.100.10:9000/",
+          "stash_url" => "http://192.168.100.60:7990/"
+        }
       }
     end
 
