@@ -31,9 +31,12 @@ Vagrant.configure(2) do |config|
         "sonarqube" => {
           #"mirror" => "https://sonarsource.bintray.com/Distribution/sonarqube/",
           #"mirror" => "http://downloads.sonarsource.com/sonarqube/",
-          #"mirror" => "https://192.168.1.125/"
+          #"mirror" => "http://192.168.1.125/"
         },
         "tomcat_liatrio" => {
+          #"version" => "8.0.33",
+          #"tarball_base_path" => "http://192.168.1.125/",
+          #"checksum_base_path" => "http://192.168.1.125/",
           "connector_port" => "8082",
           "ajp_port" => "8010"
         },
