@@ -63,6 +63,11 @@ Vagrant.configure(2) do |config|
           }
         },
         "hygieia_liatrio" => {
+          "dbname" => "dashboard",
+          "dbhost" => "127.0.0.1",
+          "dbport" => 27017,
+          "dbusername" => "db",
+          "dbpassword" => "dbpass",
           "jenkins_url" => "http://192.168.100.10:8083/",
           "udeploy_url" => "http://192.168.100.40:8080",
           "udeploy_username" => "admin",
@@ -88,11 +93,11 @@ Vagrant.configure(2) do |config|
     hygieia.vm.provider :virtualbox do |v|
       v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
       v.customize ["modifyvm", :id, "--cpus", 2]
-      v.customize ["modifyvm", :id, "--memory", 1536]
+      v.customize ["modifyvm", :id, "--memory", 8192]
       #v.customize ["modifyvm", :id, "--name", "hygieia-dev"]
     end
 
-    hygieia.vm.provision "shell", inline: "systemctl enable tomcat_petclinic && firewall-cmd --permanent --add-port=8081/tcp --add-port=9000/tcp --add-port=8082/tcp --add-port=8083/tcp --add-port=3000/tcp --add-port=8080/tcp && firewall-cmd --reload && echo '192.168.100.40 imbucd' >> /etc/hosts"
+    hygieia.vm.provision "shell", inline: "firewall-cmd --permanent --add-port=8081/tcp --add-port=9000/tcp --add-port=8082/tcp --add-port=8083/tcp --add-port=3000/tcp --add-port=8080/tcp && firewall-cmd --reload && echo '192.168.100.40 imbucd' >> /etc/hosts"
 
   end
 
