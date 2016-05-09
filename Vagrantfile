@@ -44,8 +44,9 @@ Vagrant.configure(2) do |config|
         "jenkins" => {
           "master" => {
             "host" => "localhost",
-            "port" => 8083
-            #"repostiroy" => "http://pkg.jenkins-ci.org/redhat"
+            "port" => 8083,
+            #"repostiroy" => "http://pkg.jenkins-ci.org/redhat",
+            "version" => "1.651-1.1"
           }
         },
         "jenkins_liatrio" => {
