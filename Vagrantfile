@@ -15,6 +15,8 @@ Vagrant.configure(2) do |config|
       chef.add_recipe "tomcat-liatrio"
       chef.add_recipe "jenkins-liatrio"
       chef.add_recipe "jenkins-liatrio::install_plugins"
+      chef.add_recipe "jenkins-liatrio::install_plugins_pipeline"
+      chef.add_recipe "jenkins-liatrio::install_plugins_hygieia"
       chef.add_recipe "jenkins-liatrio::create_job"
       chef.add_recipe "jenkins-liatrio::create_creds"
       chef.add_recipe "selenium-liatrio"
