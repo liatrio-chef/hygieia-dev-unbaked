@@ -104,7 +104,7 @@ Vagrant.configure(2) do |config|
       #v.customize ["modifyvm", :id, "--name", "hygieia-dev"]
     end
 
-    hygieia.vm.provision "shell", inline: "firewall-cmd --permanent --add-port=8081/tcp --add-port=9000/tcp --add-port=8082/tcp --add-port=8083/tcp --add-port=4444/tcp --add-port=3000/tcp --add-port=8080/tcp --add-port=27017/tcp && firewall-cmd --reload && echo '192.168.100.40 imbucd' >> /etc/hosts"
+    hygieia.vm.provision "shell", inline: "firewall-cmd --permanent --add-port=8081/tcp --add-port=9000/tcp --add-port=8082/tcp --add-port=8083/tcp --add-port=4444/tcp --add-port=3000/tcp --add-port=8080/tcp --add-port=27017/tcp && firewall-cmd --reload"
 
   end
 
