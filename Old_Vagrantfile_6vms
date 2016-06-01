@@ -1,0 +1,244 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure(2) do |config|
+
+  #
+  # archiva-liatrio
+  #
+  config.vm.define "archiva", :primary => true do |archiva|
+    archiva.vm.box = "pozgo/centos7"
+
+    archiva.vm.provision "chef_solo" do |chef|
+      chef.add_recipe "archiva-liatrio"
+      chef.json = {
+      }
+    end
+
+    archiva.berkshelf.enabled = true
+
+    archiva.vm.hostname = 'archiva-liatrio'
+    archiva.vm.network :private_network, ip: "192.168.100.30"
+    archiva.vm.network :forwarded_port, guest: 22, host: 2230, id: "ssh"
+    archiva.vm.network :forwarded_port, guest: 8080, host: 18081 # archiva
+
+    archiva.vm.provider :virtualbox do |v|
+      v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+      v.customize ["modifyvm", :id, "--cpus", 2]
+      v.customize ["modifyvm", :id, "--memory", 1024]
+      #v.customize ["modifyvm", :id, "--name", "archiva-liatrio"]
+    end
+
+    archiva.vm.provision "shell", inline: "firewall-cmd --permanent --add-port=8080/tcp && firewall-cmd --reload"
+
+  end
+
+  #
+  # bitbucket
+  #
+  config.vm.define "bitbucket", :primary => true do |bitbucket|
+    bitbucket.vm.box = "pozgo/centos7"
+
+    bitbucket.vm.provision "chef_solo" do |chef|
+      chef.cookbooks_path = ["cookbooks-liatrio"]
+      chef.add_recipe "bitbucket"
+      chef.json = {
+      }
+    end
+
+    bitbucket.berkshelf.enabled = true
+
+    bitbucket.vm.hostname = 'bitbucket'
+    bitbucket.vm.network :private_network, ip: "192.168.100.60"
+    bitbucket.vm.network :forwarded_port, guest: 22, host: 2260, id: "ssh"
+    bitbucket.vm.network :forwarded_port, guest: 7990, host: 17990
+    bitbucket.vm.network :forwarded_port, guest: 7999, host: 7999
+
+    bitbucket.vm.provider :virtualbox do |v|
+      v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+      v.customize ["modifyvm", :id, "--cpus", 2]
+      v.customize ["modifyvm", :id, "--memory", 2048]
+      #v.customize ["modifyvm", :id, "--name", "bitbucket"]
+    end
+
+    bitbucket.vm.provision "shell", inline: "firewall-cmd --permanent --add-port=7990/tcp --add-port=7999/tcp && firewall-cmd --reload"
+
+  end
+
+
+  #
+  # sonarqube-liatrio
+  #
+  config.vm.define "sonarqube", :primary => true do |sonarqube|
+    sonarqube.vm.box = "pozgo/centos7"
+
+    sonarqube.vm.provision "chef_solo" do |chef|
+      chef.add_recipe "sonarqube-liatrio"
+      chef.json = {
+        "java" => {
+          "jdk_version" => "8",
+        }
+      }
+    end
+
+    sonarqube.berkshelf.enabled = true
+
+    sonarqube.vm.hostname = 'sonarqube-liatrio'
+    sonarqube.vm.network :private_network, ip: "192.168.100.70"
+    sonarqube.vm.network :forwarded_port, guest: 22, host: 2270, id: "ssh"
+    sonarqube.vm.network :forwarded_port, guest: 9000, host: 19000 # sonarqube
+
+    sonarqube.vm.provider :virtualbox do |v|
+      v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+      v.customize ["modifyvm", :id, "--cpus", 2]
+      v.customize ["modifyvm", :id, "--memory", 1024]
+      #v.customize ["modifyvm", :id, "--name", "sonarqube-liatrio"]
+    end
+
+    sonarqube.vm.provision "shell", inline: "systemctl stop firewalld; systemctl disable firewalld"
+
+  end
+
+  #
+  # tomcat-liatrio
+  #
+  config.vm.define "tomcat", :primary => true do |tomcat|
+    tomcat.vm.box = "pozgo/centos7"
+
+    tomcat.vm.provision "chef_solo" do |chef|
+      chef.add_recipe "tomcat-liatrio"
+      chef.json = {
+        "java" => {
+          "jdk_version" => "8",
+        },
+        "tomcat_liatrio" => {
+          "connector_port" => "8082"
+        }
+      }
+    end
+
+    tomcat.berkshelf.enabled = true
+
+    tomcat.vm.hostname = 'tomcat'
+    tomcat.vm.network :private_network, ip: "192.168.100.80"
+    #tomcat.vm.network :forwarded_port, guest: 22, host: 2280, id: "ssh"
+    tomcat.vm.network :forwarded_port, guest: 8082, host: 18082 # tomcat
+
+    tomcat.vm.provider :virtualbox do |v|
+      v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+      v.customize ["modifyvm", :id, "--cpus", 2]
+      v.customize ["modifyvm", :id, "--memory", 1024]
+      #v.customize ["modifyvm", :id, "--name", "tomcat-liatrio"]
+    end
+
+    tomcat.vm.provision "shell", inline: "firewall-cmd --permanent --add-port=8082/tcp && firewall-cmd --reload"
+
+  end
+
+  #
+  # jenkins
+  #
+  config.vm.define "jenkins", :primary => true do |jenkins|
+    jenkins.vm.box = "pozgo/centos7"
+
+    jenkins.vm.provision "chef_solo" do |chef|
+      chef.add_recipe "jenkins::install_server"
+      chef.add_recipe "jenkins::install_plugins"
+      chef.add_recipe "jenkins::create_job"
+      chef.add_recipe "jenkins::test"
+      chef.json = {
+        "jenkins" => {
+          "maven_mirror" => "http://192.168.100.30:8080/repository/internal"
+        }
+      }
+    end
+
+    jenkins.berkshelf.enabled = true
+
+    jenkins.vm.hostname = 'jenkins'
+    jenkins.vm.network :private_network, ip: "192.168.100.20"
+    jenkins.vm.network :forwarded_port, guest: 22, host: 2220, id: "ssh"
+    jenkins.vm.network :forwarded_port, guest: 8080, host: 18080 # jenkins
+
+    jenkins.vm.provider :virtualbox do |v|
+      v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+      v.customize ["modifyvm", :id, "--cpus", 4]
+      v.customize ["modifyvm", :id, "--memory", 4096]
+      #v.customize ["modifyvm", :id, "--name", "jenkins"]
+    end
+
+    jenkins.vm.provision "shell", inline: "firewall-cmd --permanent --add-port=8080/tcp && firewall-cmd --reload"
+
+  end
+
+
+  #
+  # ibm-ucd
+  #
+  config.vm.define "ibmucd", :primary => true do |ibmucd|
+    ibmucd.vm.box = "pozgo/centos7"
+
+    ibmucd.vm.provision "chef_solo" do |chef|
+      chef.add_recipe "ibm-ucd"
+      chef.json = {
+        "java" => {
+          "jdk_version" => "8",
+          "install_flavor" => "oracle",
+          "oracle" => {
+            "accept_oracle_download_terms" => true
+          }
+        }
+      }
+    end
+
+    ibmucd.berkshelf.enabled = true
+
+    ibmucd.vm.hostname = 'ibmucd'
+    ibmucd.vm.network :private_network, ip: "192.168.100.40"
+    ibmucd.vm.network :forwarded_port, guest: 22, host: 2240, id: "ssh"
+    ibmucd.vm.network :forwarded_port, guest: 8080, host: 18083
+    ibmucd.vm.network :forwarded_port, guest: 8443, host: 18443 # ibmucd
+
+    ibmucd.vm.provider :virtualbox do |v|
+      v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+      v.customize ["modifyvm", :id, "--cpus", 2]
+      v.customize ["modifyvm", :id, "--memory", 1024]
+      #v.customize ["modifyvm", :id, "--name", "ibmucd"]
+    end
+
+    ibmucd.vm.provision "shell", inline: "firewall-cmd --permanent --add-port=8080/tcp --add-port=7918/tcp && firewall-cmd --reload"
+
+  end
+
+  #
+  # hygieia
+  #
+  config.vm.define "hygieia", :primary => true do |hygieia|
+    hygieia.vm.box = "liatrio/hygieia"
+
+    hygieia.vm.hostname = 'hygieia'
+    hygieia.vm.network :private_network, ip: "192.168.100.50"
+    hygieia.vm.network :forwarded_port, guest: 22, host: 2250, id: "ssh"
+    hygieia.vm.network "forwarded_port", :guest => 3000, :host => 13000 # hygieia
+    hygieia.vm.network "forwarded_port", :guest => 3000, :host => 18099 # hygieia-api
+
+    hygieia.vm.provision "chef_solo" do |chef|
+      #chef.add_recipe "hygieia-liatrio"
+      chef.json = {
+      }
+    end
+
+    hygieia.berkshelf.enabled = true
+  
+    hygieia.vm.provider :virtualbox do |v|
+      v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+      v.customize ["modifyvm", :id, "--cpus", 2]
+      v.customize ["modifyvm", :id, "--memory", 3072]
+      #v.customize ["modifyvm", :id, "--name", "hygieia"]
+    end
+
+    hygieia.vm.provision "shell", inline: "firewall-cmd --permanent --add-port=3000/tcp --add-port=8080/tcp && firewall-cmd --reload"
+
+  end
+
+end

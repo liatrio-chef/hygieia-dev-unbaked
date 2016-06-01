@@ -1,0 +1,112 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure(2) do |config|
+
+  #if ENV['VAGRANTPROXY'] = 'true' 
+  #  config.proxy.http = 'http://192.168.100.90:3128/'
+  #  config.proxy.https = 'http://192.168.100.90:3128/'
+  #  config.proxy.no_proxy = '127.0.0.1,127.0.1.1,localhost'
+  #end
+
+  #
+  # pipeline-liatrio
+  #
+  config.vm.define "pipeline", :primary => true do |pipeline|
+    #pipeline.vm.box = "pozgo/centos7"
+    #pipeline.vm.box = "liatrio/centos7chefclient"
+    pipeline.vm.box = "centos7chefjava"
+
+    pipeline.vm.provision "chef_solo" do |chef|
+      chef.add_recipe "archiva-liatrio"
+      chef.add_recipe "sonarqube-liatrio"
+      chef.add_recipe "tomcat-liatrio"
+      chef.add_recipe "jenkins::install_server"
+      chef.add_recipe "jenkins::install_plugins"
+      chef.add_recipe "jenkins::create_job"
+      chef.add_recipe "jenkins::finishrecipe"
+      chef.json = {
+        "java" => {
+          "jdk_version" => "8",
+        },
+        "archiva" => {
+          "version" => "2.2.0",
+          "checksum" => "6af7c3c47c35584f729a9c139675a01f9a9819d0cdde292552fc783284a34cfa",
+          #"mirror" => "https://192.168.1.125/",
+          "web_port" => "8081",
+        },
+        "sonarqube" => {
+          #"mirror" => "https://sonarsource.bintray.com/Distribution/sonarqube/",
+          #"mirror" => "http://downloads.sonarsource.com/sonarqube/",
+          #"mirror" => "http://192.168.1.125/"
+        },
+        "tomcat_liatrio" => {
+          "connector_port" => "8082",
+          "ajp_port" => "8010"
+        },
+        "jenkins" => {
+          "maven_mirror" => "http://localhost:8081/repository/internal",
+          "sonarurl" => "http://localhost:9000",
+          "sonarjdbcurl" => "tcp://localhost:9092/sonar",
+          "githuburl" => "https://github.com/drewliatro/spring-petclinic/",
+          "giturl" => "https://github.com/drew-liatrio/spring-petclinic.git",
+          "port" => "8080"
+          #"jenkinsdlurl" => "http://192.168.1.125/jenkins-1.653-1.1.noarch.rpm",
+	  "hygieiaurl" => https://github.com/drew-holt/spring-petclinic.git"
+        } 
+      }
+    end
+
+    pipeline.berkshelf.enabled = true
+
+    pipeline.vm.hostname = 'pipeline'
+    pipeline.vm.network :private_network, ip: "192.168.100.10"
+    pipeline.vm.network :forwarded_port, guest: 22, host: 2210, id: "ssh"
+    pipeline.vm.network :forwarded_port, guest: 8081, host: 18081 # archiva
+    pipeline.vm.network :forwarded_port, guest: 9000, host: 19000 # sonarqube
+    pipeline.vm.network :forwarded_port, guest: 8082, host: 18082 # tomcat
+    pipeline.vm.network :forwarded_port, guest: 8080, host: 18080 # jenkins
+
+    pipeline.vm.provider :virtualbox do |v|
+      v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+      v.customize ["modifyvm", :id, "--cpus", 2]
+      v.customize ["modifyvm", :id, "--memory", 1536]
+      #v.customize ["modifyvm", :id, "--name", "pipeline-liatrio"]
+    end
+
+    pipeline.vm.provision "shell", inline: "systemctl enable tomcat_petclinic && firewall-cmd --permanent --add-port=8081/tcp --add-port=9000/tcp --add-port=8082/tcp --add-port=8080/tcp && firewall-cmd --reload && echo '192.168.100.40 imbucd' >> /etc/hosts"
+
+  end
+
+  #
+  # hygieia
+  #
+  config.vm.define "hygieia", :primary => true do |hygieia|
+    hygieia.vm.box = "liatrio/hygieia"
+
+    hygieia.vm.hostname = 'hygieia'
+    hygieia.vm.network :private_network, ip: "192.168.100.50"
+    hygieia.vm.network :forwarded_port, guest: 22, host: 2250, id: "ssh"
+    hygieia.vm.network "forwarded_port", :guest => 3000, :host => 13000 # hygieia
+    hygieia.vm.network "forwarded_port", :guest => 8080, :host => 18099 # hygieia-api
+
+    hygieia.vm.provision "chef_solo" do |chef|
+      #chef.add_recipe "hygieia-liatrio"
+      chef.json = {
+      }
+    end
+
+    hygieia.berkshelf.enabled = true
+
+    hygieia.vm.provider :virtualbox do |v|
+      v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+      v.customize ["modifyvm", :id, "--cpus", 2]
+      v.customize ["modifyvm", :id, "--memory", 3072]
+      #v.customize ["modifyvm", :id, "--name", "hygieia"]
+    end
+
+    hygieia.vm.provision "shell", inline: "firewall-cmd --permanent --add-port=3000/tcp --add-port=8080/tcp && firewall-cmd --reload"
+
+  end
+
+end
