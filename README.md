@@ -12,7 +12,7 @@ Vagrant 1.8.1
 
 ChefDK must be installed: https://downloads.chef.io/chef-dk/
 
-vagrant-berkshelf plugin must installed: `vagrant plugin install vagrant-berkshelf`
+vagrant-berkshelf plugin must installed: `vagrant plugin install vagrant-berkshelf`. This cookbook relies on [Berkshelf](http://berkshelf.com) to pull wrapper cookbook dependencies from https://github.com/liatrio-chef
 
 Usage
 -----
@@ -23,25 +23,28 @@ Usage
 ![Alt text](media/pipeline.png)
 
 Pipeline (Internal IP 192.168.100.10)
-- Jenkins - Browse to http://localhost:18083/ 
-  - may need to build petclinic 1-3x due to network issues if archiva fails to mirror artifacts
-  - on successful build the war is deployed to the tomcat instance by scp'ing the artifact from archiva to /opt/tomcat_petclinic/webapps
+- Jenkins - Browse to [http://localhost:18083/](http://localhost:18083/)
+- may need to build petclinic 1-3x due to network issues if archiva fails to mirror artifacts
+- on successful build the war is deployed to the tomcat instance by scp'ing the artifact from archiva to /opt/tomcat_petclinic/webapps
 
-- Archiva - Browse to http://localhost:18081/
-  - admin :: admin1
-  - snapshots :: snapshots1
-  - deploy :: deploy1
+- Archiva - Browse to [http://localhost:18081/](http://localhost:18081/)
+- admin :: admin1
+- snapshots :: snapshots1
+- deploy :: deploy1
 
-- Sonarqube - Browse to http://localhost:19000/
-  - admin :: admin
+- Sonarqube - Browse to [http://localhost:19000/](http://localhost:19000/)
+- admin :: admin
 
-- Tomcat - Browse to http://localhost:18082/
-  - petclinic is deployed to a link in the form of http://localhost:18082/spring-petclinic-4.2.4-20160314.054124-1/ - which can be be derived from the jenkins build console output
+- Tomcat - Browse to [http://localhost:18082/](http://localhost:18082/)
+- petclinic is deployed to a link in the form of [http://localhost:18082/spring-petclinic-4.2.4-20160314.054124-1/](http://localhost:18082/spring-petclinic-4.2.4-20160314.054124-1/) - which can be be derived from the jenkins build console output
 
-- Hygieia - Browse to http://localhost:13000/ 
+- Selenium
+- Chrome and Firefox are provided
+- Each run as a Jenkins to test searching for an Owner in the Petclinic app.
+- A screenshot is captured for each browser in /var/lib/jenkins/jobs/selenium-chrome-petclinic-test/workspace/checkup_chrome.png and /var/lib/jenkins/jobs/selenium-firefox-petclinic-test/workspace/checkup_firefox.png
+
+- Hygieia - Browse to [http://localhost:13000/](http://localhost:13000/)
   - create a user and dashboard, the collectors are aware of the different components
-
-This cookbook relies on [Berkshelf](http://berkshelf.com) to pull wrapper cookbook dependencies from https://github.com/liatrio-chef
 
 Configuration
 -------------
