@@ -21,6 +21,7 @@ Vagrant.configure(2) do |config|
       chef.add_recipe "jenkins-liatrio::create_creds"
       chef.add_recipe "selenium-liatrio"
       chef.add_recipe "hygieia-liatrio"
+      chef.add_recipe "hygieia-liatrio::apache2"
       chef.json = {
         "java" => {
           "jdk_version" => "8",
@@ -78,15 +79,20 @@ Vagrant.configure(2) do |config|
           "udeploy_password" => "password",
           "sonar_url" => "http://192.168.100.10:9000/",
           "stash_url" => "http://192.168.100.60:7990/"
+        },
+        "apache2_liatrio" => {
+          "place" => "holder",
         }
       }
     end
 
     hygieia.berkshelf.enabled = true
 
-    hygieia.vm.hostname = 'hygieia'
+    hygieia.vm.hostname = 'hygieia.local'
     hygieia.vm.network :private_network, ip: "192.168.100.10"
     hygieia.vm.network :forwarded_port, guest: 22, host: 2210, id: "ssh"
+    hygieia.vm.network :forwarded_port, guest: 80, host: 1080 # apache http
+    hygieia.vm.network :forwarded_port, guest: 443, host: 1443 # apache https
     hygieia.vm.network :forwarded_port, guest: 8081, host: 18081 # archiva
     hygieia.vm.network :forwarded_port, guest: 9000, host: 19000 # sonarqube
     hygieia.vm.network :forwarded_port, guest: 8082, host: 18082 # tomcat
@@ -104,7 +110,7 @@ Vagrant.configure(2) do |config|
       #v.customize ["modifyvm", :id, "--name", "hygieia-dev"]
     end
 
-    hygieia.vm.provision "shell", inline: "firewall-cmd --permanent --add-port=8081/tcp --add-port=9000/tcp --add-port=8082/tcp --add-port=8083/tcp --add-port=4444/tcp --add-port=3000/tcp --add-port=8080/tcp --add-port=27017/tcp && firewall-cmd --reload"
+    hygieia.vm.provision "shell", inline: "firewall-cmd --permanent --add-port=80/tcp --add-port=443/tcp --add-port=8081/tcp --add-port=9000/tcp --add-port=8082/tcp --add-port=8083/tcp --add-port=4444/tcp --add-port=3000/tcp --add-port=8080/tcp --add-port=27017/tcp && firewall-cmd --reload"
 
   end
 
