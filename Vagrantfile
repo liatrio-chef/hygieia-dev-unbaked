@@ -7,7 +7,7 @@ Vagrant.configure(2) do |config|
   # hygieia-liatrio
   #
   config.vm.define "hygieia", :primary => true do |hygieia|
-    hygieia.vm.box = "liatrio/centos7chefjava"
+    hygieia.vm.box = "bento/centos-7.2"
 
     hygieia.vm.provision "chef_solo" do |chef|
       chef.add_recipe "archiva-liatrio"
@@ -45,6 +45,7 @@ Vagrant.configure(2) do |config|
           "ajp_port" => "8010"
         },
         "jenkins" => {
+          "java" => "java",
           "master" => {
             "host" => "localhost",
             "port" => 8083,
@@ -88,7 +89,7 @@ Vagrant.configure(2) do |config|
 
     hygieia.berkshelf.enabled = true
 
-    hygieia.vm.hostname = 'hygieia.local'
+    #hygieia.vm.hostname = 'hygieia.local'
     hygieia.vm.network :private_network, ip: "192.168.100.10"
     hygieia.vm.network :forwarded_port, guest: 22, host: 2210, id: "ssh"
     hygieia.vm.network :forwarded_port, guest: 80, host: 1080 # apache http
@@ -109,8 +110,6 @@ Vagrant.configure(2) do |config|
       v.customize ["modifyvm", :id, "--memory", 8192]
       #v.customize ["modifyvm", :id, "--name", "hygieia-dev"]
     end
-
-    hygieia.vm.provision "shell", inline: "firewall-cmd --permanent --add-port=80/tcp --add-port=443/tcp --add-port=8081/tcp --add-port=9000/tcp --add-port=8082/tcp --add-port=8083/tcp --add-port=4444/tcp --add-port=3000/tcp --add-port=8080/tcp --add-port=27017/tcp && firewall-cmd --reload"
 
   end
 
