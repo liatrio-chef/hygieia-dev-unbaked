@@ -23,7 +23,6 @@ Vagrant.configure(2) do |config|
       chef.add_recipe "hygieia-liatrio::mongodb"
       chef.add_recipe "hygieia-liatrio::node"
       chef.add_recipe "hygieia-liatrio"
-      chef.add_recipe "hygieia-liatrio::mongodb_sample_data"
       chef.add_recipe "hygieia-liatrio::apache2"
 
       chef.json = {
