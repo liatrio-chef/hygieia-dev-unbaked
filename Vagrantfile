@@ -20,8 +20,12 @@ Vagrant.configure(2) do |config|
       chef.add_recipe "jenkins-liatrio::create_jobs"
       chef.add_recipe "jenkins-liatrio::create_creds"
       chef.add_recipe "selenium-liatrio"
+      chef.add_recipe "hygieia-liatrio::mongodb"
+      chef.add_recipe "hygieia-liatrio::node"
       chef.add_recipe "hygieia-liatrio"
+      chef.add_recipe "hygieia-liatrio::mongodb_sample_data"
       chef.add_recipe "hygieia-liatrio::apache2"
+
       chef.json = {
         "java" => {
           "jdk_version" => "8",
