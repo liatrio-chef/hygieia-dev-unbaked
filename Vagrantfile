@@ -36,6 +36,8 @@ Vagrant.configure(2) do |config|
           "web_port" => "8081",
         },
         "sonarqube" => {
+          "version" => "5.6.1",
+          "checksum" => "9cb74cd00904e7c804deb3b31158dc8651a41cbe07e9253c53c9b11c9903c9b1"
           #"mirror" => "https://sonarsource.bintray.com/Distribution/sonarqube/",
           #"mirror" => "http://downloads.sonarsource.com/sonarqube/",
           #"mirror" => "http://192.168.1.125/"
