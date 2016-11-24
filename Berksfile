@@ -1,4 +1,4 @@
-source "https://supermarket.chef.io"
+source 'https://supermarket.chef.io'
 
 metadata
 
@@ -10,5 +10,5 @@ cookbook 'tomcat-liatrio', git: 'http://github.com/liatrio-chef/tomcat-liatrio.g
 cookbook 'selenium-liatrio', git: 'http://github.com/liatrio-chef/selenium-liatrio.git'
 cookbook 'hygieia-liatrio', git: 'http://github.com/liatrio-chef/hygieia-liatrio.git'
 
-#cookbook 'bitbucket', :path => './cookbooks-liatrio/bitbucket'
-#cookbook 'ibmucd', :path => './cookbooks-liatrio/ibmucd'
+# cookbook 'bitbucket', :path => './cookbooks-liatrio/bitbucket'
+# cookbook 'ibmucd', :path => './cookbooks-liatrio/ibmucd'
