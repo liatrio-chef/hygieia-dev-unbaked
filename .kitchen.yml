@@ -1,0 +1,80 @@
+---
+driver:
+  name: docker
+  use_sudo: false
+  require_chef_omnibus: 12.16.42
+
+  # XXX consider adding a docker container with chef-client already installed
+  # require_chef_omnibus: false
+  # provision_command: curl -L https://www.opscode.com/chef/install.sh | bash
+
+platforms:
+  - name: centos-6.8
+
+suites:
+  - name: jenkins-liatrio
+    run_list:
+      - recipe['archiva-liatrio']
+      - recipe['sonarqube-liatrio']
+      - recipe['tomcat-liatrio']
+      - recipe['jenkins-liatrio']
+      - recipe['jenkins-liatrio::install_plugins']
+      - recipe['jenkins-liatrio::install_plugins_pipeline']
+      - recipe['jenkins-liatrio::install_plugins_hygieia']
+      - recipe['jenkins-liatrio::create_jobs']
+      - recipe['jenkins-liatrio::create_creds']
+      - recipe['selenium-liatrio']
+      - recipe['hygieia-liatrio::mongodb']
+      - recipe['hygieia-liatrio::node']
+      - recipe['hygieia-liatrio']
+      - recipe['hygieia-liatrio::apache2']
+    attributes:
+      java:
+        jdk_version: "8"
+      jenkins:
+        master:
+          host: "localhost"
+          version: "1.651-1.1"
+      jenkins_liatrio:
+        install_plugins:
+          plugins_list:
+            -  maven-plugin=2.7.1
+            -  cvs=2.11
+            -  ant=1.2
+            -  credentials=1.18
+            -  pam-auth=1.1
+            -  translation=1.10
+            -  junit=1.2-beta-4
+            -  matrix-auth=1.1
+            -  mailer=1.11
+            -  matrix-project=1.4.1
+            -  subversion=1.54
+            -  script-security=1.13
+            -  windows-slaves=1.0
+            -  ssh-slaves=1.9
+            -  antisamy-markup-formatter=1.1
+            -  ssh-credentials=1.10
+            -  external-monitor-job=1.4
+            -  javadoc=1.1
+            -  ldap=1.11
+            -  structs=1.2
+            -  workflow-step-api=1.15
+            -  workflow-scm-step=1.14.2
+            -  git-client=2.1.0
+            -  scm-api=1.3
+            -  git=3.0.1
+            -  github-api=1.69
+            -  plain-credentials=1.1
+            -  token-macro=1.5.1
+            -  github=1.23.1
+            -  job-dsl=1.53
+            -  envinject=1.93.1
+            -  run-condition=1.0
+            -  conditional-buildstep=1.3.1
+            -  parameterized-trigger=2.32
+            -  cloudbees-folder=5.13
+            -  jackson2-api=2.7.3
+            -  aws-java-sdk=1.11.37
+            -  copyartifact=1.38.1
+            -  slack=2.0.1
+            -  s3=0.10.10
