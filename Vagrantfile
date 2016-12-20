@@ -9,6 +9,9 @@ Vagrant.configure(2) do |config|
     hygieia.vm.box = 'bento/centos-7.2'
 
     hygieia.vm.provision 'chef_solo' do |chef|
+
+      chef.version = "12.16.42"
+
       # chef.add_recipe 'archiva-liatrio'
       chef.add_recipe 'sonarqube-liatrio'
       chef.add_recipe 'tomcat-liatrio'
@@ -16,13 +19,13 @@ Vagrant.configure(2) do |config|
       chef.add_recipe 'jenkins-liatrio::install_plugins'
       chef.add_recipe 'jenkins-liatrio::install_plugins_pipeline'
       chef.add_recipe 'jenkins-liatrio::install_plugins_hygieia'
+      chef.add_recipe 'jenkins-liatrio::plugin_maven'
       chef.add_recipe 'jenkins-liatrio::job_vagrantbox'
-      # chef.add_recipe 'jenkins-liatrio::create_creds'
-      chef.add_recipe 'selenium-liatrio'
-      # chef.add_recipe 'hygieia-liatrio::mongodb'
-      # chef.add_recipe 'hygieia-liatrio::node'
-      # chef.add_recipe 'hygieia-liatrio'
-      # chef.add_recipe 'hygieia-liatrio::apache2'
+      # chef.add_recipe 'selenium-liatrio'
+      chef.add_recipe 'hygieia-liatrio::mongodb'
+      chef.add_recipe 'hygieia-liatrio::node'
+      chef.add_recipe 'hygieia-liatrio'
+      chef.add_recipe 'hygieia-liatrio::apache2'
 
       chef.json = {
         'java' => {
@@ -73,6 +76,9 @@ Vagrant.configure(2) do |config|
           }
         },
         'hygieia_liatrio' => {
+          'user' => 'vagrant',
+          'group' => 'vagrant',
+          'home' => '/home/vagrant',
           'dbname' => 'dashboard',
           'dbhost' => '127.0.0.1',
           'dbport' => 27_017,
