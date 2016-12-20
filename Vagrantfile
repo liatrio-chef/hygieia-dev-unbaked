@@ -9,6 +9,9 @@ Vagrant.configure(2) do |config|
     hygieia.vm.box = 'bento/centos-7.2'
 
     hygieia.vm.provision 'chef_solo' do |chef|
+
+      chef.version = "12.16.42"
+
       chef.add_recipe 'archiva-liatrio'
       chef.add_recipe 'sonarqube-liatrio'
       chef.add_recipe 'tomcat-liatrio'
@@ -16,9 +19,10 @@ Vagrant.configure(2) do |config|
       chef.add_recipe 'jenkins-liatrio::install_plugins'
       chef.add_recipe 'jenkins-liatrio::install_plugins_pipeline'
       chef.add_recipe 'jenkins-liatrio::install_plugins_hygieia'
-      chef.add_recipe 'jenkins-liatrio::create_jobs'
-      chef.add_recipe 'jenkins-liatrio::create_creds'
-      chef.add_recipe 'selenium-liatrio'
+      chef.add_recipe 'jenkins-liatrio::plugin_maven'
+      chef.add_recipe 'jenkins-liatrio::m2_settings'
+      chef.add_recipe 'jenkins-liatrio::job_vagrantbox'
+      # chef.add_recipe 'selenium-liatrio'
       chef.add_recipe 'hygieia-liatrio::mongodb'
       chef.add_recipe 'hygieia-liatrio::node'
       chef.add_recipe 'hygieia-liatrio'
@@ -58,9 +62,9 @@ Vagrant.configure(2) do |config|
           }
         },
         'jenkins_liatrio' => {
-          'maven_mirror' => 'http://localhost:8081/repository/internal',
+          # 'maven_mirror' => 'http://localhost:8081/repository/internal',
           'install_plugins' => {
-            'enablearchiva' => true,
+            # 'enablearchiva' => true,
             'enablesonar' => true,
             'sonarurl' => 'http://localhost:9000',
             'sonarjdbcurl' => 'tcp://localhost:9092/sonar',
@@ -73,6 +77,9 @@ Vagrant.configure(2) do |config|
           }
         },
         'hygieia_liatrio' => {
+          'user' => 'vagrant',
+          'group' => 'vagrant',
+          'home' => '/home/vagrant',
           'dbname' => 'dashboard',
           'dbhost' => '127.0.0.1',
           'dbport' => 27_017,
@@ -109,6 +116,10 @@ Vagrant.configure(2) do |config|
     hygieia.vm.network :forwarded_port, guest: 27_017, host: 37_017 # mognodb
 
     hygieia.vm.provider :virtualbox do |v|
+      # fix for bento box issue https://github.com/chef/bento/issues/682
+      v.customize ['modifyvm', :id, '--natdnshostresolver1', 'on']
+      v.customize ['modifyvm', :id, '--cableconnected1', 'on']
+      v.customize ['modifyvm', :id, '--cableconnected2', 'on']
       v.customize ['modifyvm', :id, '--natdnshostresolver1', 'on']
       v.customize ['modifyvm', :id, '--cpus', 2]
       v.customize ['modifyvm', :id, '--memory', 8192]

@@ -4,12 +4,14 @@ driver:
   use_sudo: false
   require_chef_omnibus: 12.16.42
 
-  # XXX consider adding a docker container with chef-client already installed
-  # require_chef_omnibus: false
-  # provision_command: curl -L https://www.opscode.com/chef/install.sh | bash
-
 platforms:
-  - name: centos-6.8
+  - name: centos-7.2
+
+driver_config:
+  require_chef_omnibus: 12.16.42
+  provision_command: 'yum install initscripts -y'
+  run_command: '/usr/sbin/init'
+  privileged: true
 
 suites:
   - name: jenkins-liatrio
