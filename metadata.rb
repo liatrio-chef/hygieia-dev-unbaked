@@ -6,7 +6,7 @@ issues_url        'http://github.com/liatrio-chef/hygieia-dev-unbaked'
 source_url        'http://github.com/liatrio-chef/hygieia-dev-unbaked'
 description      'Installs/Configures a pipeline with hygieia dashboard'
 long_description 'Installs/Configures a pipeline with hygieia dashboard'
-version          '0.6.1'
+version          '0.6.2'
 
 depends 'archiva-liatrio' # , '~> 0.0.0'
 depends 'sonarqube-liatrio' # , '~> 0.0.0'
