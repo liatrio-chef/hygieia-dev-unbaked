@@ -20,6 +20,7 @@ Vagrant.configure(2) do |config|
       chef.add_recipe 'jenkins-liatrio::install_plugins_pipeline'
       chef.add_recipe 'jenkins-liatrio::install_plugins_hygieia'
       chef.add_recipe 'jenkins-liatrio::plugin_maven'
+      chef.add_recipe 'jenkins-liatrio::m2_settings'
       chef.add_recipe 'jenkins-liatrio::job_vagrantbox'
       # chef.add_recipe 'selenium-liatrio'
       chef.add_recipe 'hygieia-liatrio::mongodb'
