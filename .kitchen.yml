@@ -16,19 +16,20 @@ driver_config:
 suites:
   - name: jenkins-liatrio
     run_list:
-      - recipe['archiva-liatrio']
-      - recipe['sonarqube-liatrio']
-      - recipe['tomcat-liatrio']
-      - recipe['jenkins-liatrio']
+      - recipe['archiva-liatrio::default']
+      - recipe['sonarqube-liatrio::default']
+      - recipe['tomcat-liatrio::default']
+      - recipe['jenkins-liatrio::default']
       - recipe['jenkins-liatrio::install_plugins']
       - recipe['jenkins-liatrio::install_plugins_pipeline']
       - recipe['jenkins-liatrio::install_plugins_hygieia']
-      - recipe['jenkins-liatrio::create_jobs']
-      - recipe['jenkins-liatrio::create_creds']
-      - recipe['selenium-liatrio']
+      - recipe['jenkins-liatrio::plugin_maven']
+      - recipe['jenkins-liatrio::m2_settings']
+      - recipe['jenkins-liatrio::job_vagrantbox']
+      #- recipe['selenium-liatrio::default']
       - recipe['hygieia-liatrio::mongodb']
       - recipe['hygieia-liatrio::node']
-      - recipe['hygieia-liatrio']
+      - recipe['hygieia-liatrio::default']
       - recipe['hygieia-liatrio::apache2']
     attributes:
       java:
