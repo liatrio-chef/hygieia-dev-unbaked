@@ -12,7 +12,7 @@ Vagrant.configure(2) do |config|
 
       chef.version = "12.16.42"
 
-      # chef.add_recipe 'archiva-liatrio'
+      chef.add_recipe 'archiva-liatrio'
       chef.add_recipe 'sonarqube-liatrio'
       chef.add_recipe 'tomcat-liatrio'
       chef.add_recipe 'jenkins-liatrio'
