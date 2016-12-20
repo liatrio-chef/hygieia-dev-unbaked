@@ -9,8 +9,7 @@ Vagrant.configure(2) do |config|
     hygieia.vm.box = 'bento/centos-7.2'
 
     hygieia.vm.provision 'chef_solo' do |chef|
-
-      chef.version = "12.16.42"
+      chef.version = '12.16.42'
 
       chef.add_recipe 'archiva-liatrio'
       chef.add_recipe 'sonarqube-liatrio'

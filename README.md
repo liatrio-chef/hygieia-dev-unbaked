@@ -36,7 +36,7 @@ Pipeline (Internal IP 192.168.100.10)
     - admin :: admin
 
   - Tomcat - Browse to [http://localhost:18082/](http://localhost:18082/)
-    - petclinic is deployed to [http://localhost:18082/spring-petclinic/](http://localhost:18082/spring-petclinic/)
+    - petclinic is deployed to [http://localhost:18082/springboot-petclinic-1.4.1/](http://localhost:18082/springboot-petclinic-1.4.1/)
 
   - Selenium - Browse to [http://localhost:14444/](http://localhost:14444/)
     - Chrome and Firefox are provided
