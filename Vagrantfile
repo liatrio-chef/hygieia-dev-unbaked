@@ -1,6 +1,14 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
+[
+  { name: 'vagrant-berkshelf', version: '>= 5.0.0' }
+].each do |plugin|
+  unless Vagrant.has_plugin?(plugin[:name], plugin[:version])
+    raise "#{plugin[:name]} #{plugin[:version]} is required. Please run `vagrant plugin install #{plugin[:name]}`"
+  end
+end
+
 Vagrant.configure(2) do |config|
   #
   # hygieia-liatrio
